@@ -1,101 +1,189 @@
-import Image from "next/image";
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { ColumnDef } from "@tanstack/react-table";
+import React from "react";
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+type ParkingType = {
+  id: string;
+  fullName: string;
+  phoneNumber: string;
+};
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [parkings, setParkings] = React.useState<ParkingType[]>([]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const columns: ColumnDef<ParkingType>[] = [
+    {
+      accessorKey: "id",
+      header: "Id",
+    },
+    {
+      accessorKey: "fullName",
+      header: "Full name",
+    },
+    {
+      accessorKey: "phoneNumber",
+      header: "Phone number",
+    },
+  ];
+
+  const table = useReactTable({
+    parkings,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  
+
+  React.useEffect(() => {
+    fetchParkings();
+  }, []);
+
+  const fetchParkings = async () => {
+    setIsLoading(true);
+
+    const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
+    console.log("BASE_URL", BASE_URL);
+    try {
+      const response = await fetch(`${BASE_URL}/conductors`);
+
+      if (!response.ok) {
+        console.error("Error fetching parkings:", response.statusText);
+        throw new Error(`Error fetching parkings: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("data", data);
+      setParkings(data);
+    } catch (error) {
+      console.error("Error fetching parkings:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <main className="w-full p-4 h-screen flex flex-col gap-12 font-[family-name:var(--font-geist-sans)]">
+      <div className="container flex flex-col space-y-3">
+        <h1 className="text-3xl text-slate-800 font-semibold">Karz</h1>
+        <p className="text-lg text-slate-500 font-medium">
+          A powerful, modern, and user-friendly digital platform for managing
+          and organizing your parking lot.
+        </p>
+      </div>
+      <div className="container flex flex-col space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl text-slate-800 font-semibold">
+            Registered parkings
+          </h3>
+          <Button variant={"default"}>Add new parking</Button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <div className="container flex flex-col space-y-2">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="spinner-border text-primary" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
+          ) : parkings && parkings.length > 0 ? (
+            // parkings.map((parking) => (
+            //   <div
+            //     key={parking.id}
+            //     className="flex items-center justify-between space-x-4"
+            //   >
+            //     {/* <Image
+            //       src={"https://via.placeholder.com/150"}
+            //       alt={parking.fullName}
+            //       width={70}
+            //       height={70}
+            //       className="w-12 h-12 rounded-full"
+            //     /> */}
+            //     <div className="flex flex-col">
+            //       <p className="text-sm text-slate-700 font-medium">
+            //         {parking.fullName}
+            //       </p>
+            //       <p className="text-xs text-slate-500 font-medium">
+            //         {parking.phoneNumber}
+            //       </p>
+            //     </div>
+            //     <Button variant={"secondary"} size={"sm"}>
+            //       View details
+            //     </Button>
+            //   </div>
+            // ))
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <div className="spinner-border text-primary" role="status">
+                <span className="sr-only">No parking found</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </main>
   );
 }

@@ -90,7 +90,7 @@ const CreateParkingForm = () => {
                   Type <Asterisk color="red" size={12} />{" "}
                 </FormLabel>
                 <FormControl>
-                  <Select {...field}>
+                  <Select onValueChange={field.onChange}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a type" />
                     </SelectTrigger>

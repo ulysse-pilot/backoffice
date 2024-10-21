@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useRouter } from "next/navigation";
 
 type ParkingType = {
   id: string;
@@ -19,29 +20,9 @@ type ParkingType = {
 };
 
 export default function Home() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
   const [parkings, setParkings] = React.useState<ParkingType[]>([]);
-
-  // const columns: ColumnDef<ParkingType>[] = [
-  //   {
-  //     accessorKey: "id",
-  //     header: "Id",
-  //   },
-  //   {
-  //     accessorKey: "fullName",
-  //     header: "Full name",
-  //   },
-  //   {
-  //     accessorKey: "phoneNumber",
-  //     header: "Phone number",
-  //   },
-  // ];
-
-  // const table = useReactTable({
-  //   parkings,
-  //   columns,
-  //   getCoreRowModel: getCoreRowModel(),
-  // });
 
   React.useEffect(() => {
     fetchParkings();
@@ -84,7 +65,12 @@ export default function Home() {
           <h3 className="text-xl text-slate-800 font-semibold">
             Registered parkings
           </h3>
-          <Button variant={"default"}>Add new parking</Button>
+          <Button
+            variant={"default"}
+            onClick={() => router.push("/create-parking")}
+          >
+            Add new parking
+          </Button>
         </div>
         <div className="container flex flex-col space-y-2">
           {isLoading ? (
@@ -94,31 +80,6 @@ export default function Home() {
               </div>
             </div>
           ) : parkings && parkings.length > 0 ? (
-            // parkings.map((parking) => (
-            //   <div
-            //     key={parking.id}
-            //     className="flex items-center justify-between space-x-4"
-            //   >
-            //     {/* <Image
-            //       src={"https://via.placeholder.com/150"}
-            //       alt={parking.fullName}
-            //       width={70}
-            //       height={70}
-            //       className="w-12 h-12 rounded-full"
-            //     /> */}
-            //     <div className="flex flex-col">
-            //       <p className="text-sm text-slate-700 font-medium">
-            //         {parking.fullName}
-            //       </p>
-            //       <p className="text-xs text-slate-500 font-medium">
-            //         {parking.phoneNumber}
-            //       </p>
-            //     </div>
-            //     <Button variant={"secondary"} size={"sm"}>
-            //       View details
-            //     </Button>
-            //   </div>
-            // ))
             <Table>
               <TableHeader>
                 <TableRow>
@@ -133,6 +94,8 @@ export default function Home() {
                     <TableRow
                       key={parking.id}
                       // data-state={row.getIsSelected() && "selected"}
+                      className="cursor-pointer"
+                      onClick={() => router.push(`/parkings/${parking.id}`)}
                     >
                       <TableCell className="w-[100px]">{parking.id}</TableCell>
                       <TableCell>{parking.fullName}</TableCell>

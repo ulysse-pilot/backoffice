@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRouter } from "next/navigation";
+import { BASE_URL } from "@/lib/constants";
 
 type ParkingType = {
   id: number;
@@ -38,7 +39,6 @@ export default function Home() {
   const fetchParkings = async () => {
     setIsLoading(true);
 
-    const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
     console.log("BASE_URL", BASE_URL);
     try {
       const response = await fetch(`${BASE_URL}/parkings`);

@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { BASE_URL } from "@/lib/constants";
 
 const FormSchema = z.object({
   capacity: z.string(),
@@ -34,8 +35,6 @@ const FormSchema = z.object({
   // longitude: z.number(),
   // latitude: z.number(),
 });
-
-const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
 
 const CreateParkingForm = () => {
   const [myLongitude, setLongitude] = React.useState(0);

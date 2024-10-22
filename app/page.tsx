@@ -50,17 +50,25 @@ export default function Home() {
 
       const data = await response.json();
       console.log("data", data);
-      const formatedData = data.map((parking) => {
-        return {
-          id: parking.prkId,
-          capacity: parking.capacity,
-          type: parking.type,
-          address: parking.address
-            ? `${parking.address.street}, ${parking.address.city}`
-            : "Not registered yet",
-          pricePerHour: parking.pricePerHour,
-        };
-      });
+      const formatedData = data.map(
+        (parking: {
+          prkId: number;
+          capacity: number;
+          type: string;
+          address: { street: string; city: string };
+          pricePerHour: number;
+        }) => {
+          return {
+            id: parking.prkId,
+            capacity: parking.capacity,
+            type: parking.type,
+            address: parking.address
+              ? `${parking.address.street}, ${parking.address.city}`
+              : "Not registered yet",
+            pricePerHour: parking.pricePerHour,
+          };
+        }
+      );
 
       setParkings(formatedData);
     } catch (error) {

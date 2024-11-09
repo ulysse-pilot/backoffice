@@ -7,7 +7,6 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import {useRouter} from "next/navigation";
 import {BASE_URL} from "@/lib/constants";
 import {type Parking} from "@/lib/typedef";
-import {formatServerError} from "next/dist/lib/format-server-error";
 
 export default function Home() {
     const router = useRouter();

@@ -24,15 +24,15 @@ export type ParkingRequest = {
 
 export type Address = {
     id: number;
-    street: String;
-    city: String;
+    street: string;
+    city: string;
     longitude: number; // x-coord
     latitude: number;// y-coord
 }
 
 export type AddressRequest = {
-    street: String;
-    city: String;
+    street: string;
+    city: string;
     longitude: number; // x-coord
     latitude: number;// y-coord
     parkingId: number;

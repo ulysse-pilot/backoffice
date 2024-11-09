@@ -20,9 +20,7 @@ const FormSchema = z.object({
     pricePerDay: z.string().optional(),
     pricePerWeek: z.string().optional(),
     street: z.string(),
-    city: z.string(),
-    // longitude: z.number(),
-    // latitude: z.number(),
+    city: z.string()
 });
 
 const CreateParkingForm = () => {
@@ -116,7 +114,7 @@ const CreateParkingForm = () => {
                     onSubmit={form.handleSubmit(handleSubmit)}
                 >
                     <h3 className="text-xl text-slate-800 font-semibold">
-                        Generals Information's
+                        Generals Information&apos;s
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                         <FormField

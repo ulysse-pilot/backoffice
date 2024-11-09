@@ -63,7 +63,7 @@ const CreateParkingForm = () => {
             pricePerHour: Number(data.pricePerHour),
             pricePerDay: Number(data.pricePerDay) || 0,
             pricePerWeek: Number(data.pricePerWeek) || 0,
-            rate: 0,
+            rate: 1.0,
             reviews: 0
         };
 
